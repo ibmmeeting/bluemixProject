@@ -218,8 +218,6 @@ public class ReservationService {
 		String subject;
 		String content;
 		
-		if(reservation.getRsvConfirmState().equals("N")){
-			
 			email = adminDao.getAdminEmail();
 			
 			subject = "[회의실 가예약] " + rsvTitle + " (" + rsvDateString + "(" + rsvDateOfTheWeek + ") " + rsvStartTimeChange + " - " + rsvDateString + "(" + rsvDateOfTheWeek + ")" + rsvEndTimeChange	+ "), " + rsvConfNm;
@@ -246,7 +244,6 @@ public class ReservationService {
 					+ "</td>\r\n" + "		</tr>\r\n" + "\r\n" + "\r\n" + "	</table>\r\n" + "	\r\n" + "	</div>\r\n"
 					+ "</body>\r\n" + "</html>";
 			commonService.sendEmail(email, subject, content);
-		}
 	}
 	
 	
