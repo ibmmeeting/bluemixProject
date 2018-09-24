@@ -240,7 +240,7 @@
    </select>
    
    <select id="getDay" parameterType = "Integer" resultType="HashMap">
-      select min(rsv_date) as firstDay, max(rsv_date) as lastDay
+      select rsv_date
       FROM RESERVATION
       where rsv_no=#{rsvNo}
    </select>

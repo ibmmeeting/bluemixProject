@@ -141,7 +141,7 @@ public class HistoryService {
       
       
       HashMap<String,Object> dateInfo2 = reservationDao.getDay(reservationNo);
-      Date reservedDay = (Date) dateInfo2.get("firstDay");//에러
+      Date reservedDay = (Date) dateInfo2.get("rsv_date");//에러
       String reservedDayString = commonService.DateToString(reservedDay);  
       String reservedDayOfTheWeek = commonService.dayOfTheWeek(reservedDayString);
       
