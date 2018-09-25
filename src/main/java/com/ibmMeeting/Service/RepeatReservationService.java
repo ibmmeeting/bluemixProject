@@ -12,8 +12,6 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import com.ibmMeeting.Constant.ConstantCode;
@@ -21,7 +19,6 @@ import com.ibmMeeting.Dao.AdminDao;
 import com.ibmMeeting.Dao.MemberDao;
 import com.ibmMeeting.Dao.RepeatReservationDao;
 import com.ibmMeeting.VO.Member;
-import com.ibmMeeting.VO.Reservation;
 
 @Service
 public class RepeatReservationService {

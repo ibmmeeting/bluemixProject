@@ -1,8 +1,5 @@
 package com.ibmMeeting.Constant;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-
 public class ConstantCode {
 	
 	public static Integer todayConnectionCheck = 0;

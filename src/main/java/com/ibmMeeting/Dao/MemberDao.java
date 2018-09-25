@@ -5,7 +5,6 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 
 import com.ibmMeeting.VO.Member;
-import com.ibmMeeting.VO.Reservation;
 
 /**
  * @author 박세연

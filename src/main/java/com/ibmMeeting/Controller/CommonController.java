@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ibmMeeting.Constant.ConstantCode;
 import com.ibmMeeting.Service.CommonService;
 
 // 공통 컨트롤러

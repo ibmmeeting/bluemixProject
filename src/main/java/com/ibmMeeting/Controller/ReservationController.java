@@ -77,7 +77,7 @@ public class ReservationController {
 	 * @throws ParseException 
 	 */
 	@RequestMapping("/RegistReservation")
-	public ModelAndView registReservation(@ModelAttribute Reservation reservation, @RequestParam String emailCheckValue, BindingResult errors, ModelMap map, RedirectAttributes redirectAttr) throws MessagingException, ParseException{
+	public ModelAndView registReservation(@ModelAttribute final Reservation reservation, @RequestParam final String emailCheckValue, BindingResult errors, ModelMap map, RedirectAttributes redirectAttr) throws MessagingException, ParseException{
 
 		//validation
 		RegisterReservationValidator valid = new RegisterReservationValidator();
@@ -89,7 +89,24 @@ public class ReservationController {
 		}
 			
 		//insert
-		reservationService.registReservation(reservation, emailCheckValue);
+		Thread thread = new Thread(new Runnable(){
+
+			public void run() {
+				try {
+					reservationService.registReservation(reservation, emailCheckValue);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+			
+		});
+		
+		thread.start();
 
 		if(reservation.getRsvConfirmState().equals("Y")){
 			String hstState = "RESERVE";
