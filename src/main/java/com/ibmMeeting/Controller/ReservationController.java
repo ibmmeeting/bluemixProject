@@ -140,7 +140,7 @@ public class ReservationController {
 	 */
 	@RequestMapping("/ModifyReservation")
 	@ResponseBody
-	public String modifyRsv(@ModelAttribute Reservation reservation, @RequestParam String emailCheckValue){
+	public String modifyRsv(@ModelAttribute Reservation reservation, @RequestParam String emailCheckValue) throws MessagingException, ParseException{
 		
 		//예약 변경
 		reservationService.modifyReservation(reservation, emailCheckValue);
