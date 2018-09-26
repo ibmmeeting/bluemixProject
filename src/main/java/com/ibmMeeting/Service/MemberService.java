@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONArray;
@@ -14,7 +12,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ibmMeeting.Constant.ConstantCode;
 import com.ibmMeeting.Dao.MemberDao;

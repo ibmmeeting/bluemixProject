@@ -46,8 +46,25 @@ public class AdminHistoryController {
 	 */
 	@ResponseBody
 	@RequestMapping("/ReservationUpdate")
-	public Integer reservationUpdate(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, MessagingException, ParseException{
-		historyService.reservationUpdate(request);
+	public Integer reservationUpdate(final HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, MessagingException, ParseException{
+		Thread thread = new Thread(new Runnable(){
+
+			public void run() {
+				
+				try {
+					historyService.reservationUpdate(request);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		
+		thread.run();
 		
 		return ConstantCode.SUCCESS;
 		
@@ -58,8 +75,25 @@ public class AdminHistoryController {
 	 */
 	@ResponseBody
 	@RequestMapping("/ReservationDelete")
-	public Integer reservationDelete(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, MessagingException, ParseException{
-		historyService.reservationDelete(request);
+	public Integer reservationDelete(final HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException, MessagingException, ParseException{
+		
+		Thread thread = new Thread(new Runnable(){
+
+			public void run() {
+				try {
+					historyService.reservationDelete(request);
+				} catch (MessagingException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			
+		});
+		
+		thread.run();
 		
 		return ConstantCode.SUCCESS;
 		

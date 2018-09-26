@@ -1,9 +1,8 @@
 package com.ibmMeeting.Dao;
 
-import org.apache.ibatis.annotations.Mapper;
-
-import java.util.ArrayList;
 import java.util.HashMap;
+
+import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface SettingDao {

@@ -510,106 +510,122 @@ function chkRsvedTime(){
 	return res;
 }
 
+var submitted = false;
+function doubleSubmitCheck(){
+    if(submitted){
+        return submitted;
+    }else{
+       submitted = true;
+        return false;
+    }
+}
+
+
 //등록/수정 버튼 클릭시 실행
 function checkForm(){
-	
-	var banState = memberBanCheck();
-	if(banState == "T"){
-		alert("차단된 회원이므로 예약 등록 및 수정을 진행하실 수 없습니다.");
-		$('#calendar').fullCalendar('refetchEvents');
-		return false;
-	}
-	
-	//관리자로 로그인했는지 체크 , 로그인X : null
-	var loginChk = <%= session.getAttribute("id") %>;
-   	if(loginChk == null){ //관리자 로그인되지 않았을 때
-   		if($("#rsvNo").val() != null){
-   			var rsvConfirmStateVal = "Y";
-			rsvConfirmStateVal = getRsvConfirmStateVal($("#rsvNo").val());
-    		if(rsvConfirmStateVal == "ACCEPT"){
-    			alert("가예약 승인받은 예약은 관리자만 수정가능합니다.");
-    			$('#calendar').fullCalendar('refetchEvents');
-    			return false;
-    		}
-   		}
-   	}
+   if(!doubleSubmitCheck()){
+   
+   var banState = memberBanCheck();
+   if(banState == "T"){
+      alert("차단된 회원이므로 예약 등록 및 수정을 진행하실 수 없습니다.");
+      $('#calendar').fullCalendar('refetchEvents');
+      return false;
+   }
+   
+   //관리자로 로그인했는지 체크 , 로그인X : null
+   var loginChk = <%= session.getAttribute("id") %>;
+      if(loginChk == null){ //관리자 로그인되지 않았을 때
+         if($("#rsvNo").val() != null){
+            var rsvConfirmStateVal = "Y";
+         rsvConfirmStateVal = getRsvConfirmStateVal($("#rsvNo").val());
+          if(rsvConfirmStateVal == "ACCEPT"){
+             alert("가예약 승인받은 예약은 관리자만 수정가능합니다.");
+             $('#calendar').fullCalendar('refetchEvents');
+             return false;
+          }
+         }
+      }
 
-   	//가예약 상태이면 수정 불가
-	var rsvConfirmStateVal = "Y";
- 	rsvConfirmStateVal = getRsvConfirmStateVal($("#rsvNo").val());
-		
-	if(rsvConfirmStateVal == "N"){
-		alert("가예약 승인 대기 중인 예약은 수정할 수 없습니다.");
-		$('#calendar').fullCalendar('refetchEvents');
-		return false;
-	}
-   	
-	//시작시간 < 종료시간
-	var startIndex = $("#rsvStartTime option").index($("#rsvStartTime option:selected"));
-	var endIndex = $("#rsvEndTime option").index($("#rsvEndTime option:selected"));
-	if(startIndex-1 >= endIndex){
-		alert("유효하지 않는 시간입니다.");
-		$("#rsvStartTime").focus();
-		return false;
-	}
-	
-	//이미 예약된 시간선택 후 등록/수정 진행시, return false
-	var dis = chkRsvedTime()
-	if(dis == "dis"){
-		alert("선택한 시간대에 이미 예약이 되어있어 예약을 진행할 수 없습니다.");
-		return false;
-	}
-	
- 	var overTime = calTotalTime();
- 	var maxTime = getMaxTime();
- 	
-	var submit = "Y";
-	if(overTime == 'T'){
-		if(!confirm(maxTime+"시간 이상 예약은 관리자 승인이 필요합니다. 진행하시겠습니까?")){
-			submit = "N";
-			$('#calendar').fullCalendar('refetchEvents');
-			return false;
-		}else{
-			$("#rsvConfirmState").val("N");
-		}
-	}
+      //가예약 상태이면 수정 불가
+   var rsvConfirmStateVal = "Y";
+    rsvConfirmStateVal = getRsvConfirmStateVal($("#rsvNo").val());
+      
+   if(rsvConfirmStateVal == "N"){
+      alert("가예약 승인 대기 중인 예약은 수정할 수 없습니다.");
+      $('#calendar').fullCalendar('refetchEvents');
+      return false;
+   }
+      
+   //시작시간 < 종료시간
+   var startIndex = $("#rsvStartTime option").index($("#rsvStartTime option:selected"));
+   var endIndex = $("#rsvEndTime option").index($("#rsvEndTime option:selected"));
+   if(startIndex-1 >= endIndex){
+      alert("유효하지 않는 시간입니다.");
+      $("#rsvStartTime").focus();
+      return false;
+   }
+   
+   //이미 예약된 시간선택 후 등록/수정 진행시, return false
+   var dis = chkRsvedTime()
+   if(dis == "dis"){
+      alert("선택한 시간대에 이미 예약이 되어있어 예약을 진행할 수 없습니다.");
+      return false;
+   }
+   
+    var overTime = calTotalTime();
+    var maxTime = getMaxTime();
+    
+   var submit = "Y";
+   if(overTime == 'T'){
+      if(!confirm(maxTime+"시간 이상 예약은 관리자 승인이 필요합니다. 진행하시겠습니까?")){
+         submit = "N";
+         $('#calendar').fullCalendar('refetchEvents');
+         return false;
+      }else{
+         $("#rsvConfirmState").val("N");
+      }
+   }
  
-	preventMonopoly($("#rsvNo").val());
-	var count = $("#monopolyCount").val();
+   preventMonopoly($("#rsvNo").val());
+   var count = $("#monopolyCount").val();
 
-	//이 값이 "T"이면 가예약상태
-	if(count == "T"){
-		if(!confirm("이번주에 "+maxTime*3+"시간 이상 예약을 진행 중이셔서 가예약됩니다. 진행하시겠습니까?")){
-			submit = "N";
-			$('#calendar').fullCalendar('refetchEvents');
-			return false;
-		}else{
-			$("#rsvConfirmState").val("N");
-		}
-	} 
-	
-	if(submit == "N"){
-		return false;
-	}
-	 
-	emailStateCheck();
-	
-	//validation
-	//전화번호 -> 숫자이외의 값이 적혀있을 때, 에러 출력
-	var tel = $("#rsvMemPn").val();
-	if(tel.length>13 || tel.length < 12){
-		alert("전화번호를 다시 확인 후 입력하여 주세요.");
-		$("#rsvMemPn").focus();
-		return false;
-	}
-	
-	//이메일
-	var bool = emailcheck($("#rsvMemEm").val());
- 	if(bool == false){
- 		alert("이메일 형식에 맞춰 값을 적어주세요.");
- 		$("#rsvMemEm").focus();
- 		return false;
- 	}
+   //이 값이 "T"이면 가예약상태
+   if(count == "T"){
+      if(!confirm("이번주에 "+maxTime*3+"시간 이상 예약을 진행 중이셔서 가예약됩니다. 진행하시겠습니까?")){
+         submit = "N";
+         $('#calendar').fullCalendar('refetchEvents');
+         return false;
+      }else{
+         $("#rsvConfirmState").val("N");
+      }
+   } 
+   
+   if(submit == "N"){
+      return false;
+   }
+    
+   emailStateCheck();
+   
+   //validation
+   //전화번호 -> 숫자이외의 값이 적혀있을 때, 에러 출력
+   var tel = $("#rsvMemPn").val();
+   if(tel.length>13 || tel.length < 12){
+      alert("전화번호를 다시 확인 후 입력하여 주세요.");
+      $("#rsvMemPn").focus();
+      return false;
+   }
+   
+   //이메일
+   var bool = emailcheck($("#rsvMemEm").val());
+    if(bool == false){
+       alert("이메일 형식에 맞춰 값을 적어주세요.");
+       $("#rsvMemEm").focus();
+       return false;
+    }
+   }else{
+      return false;
+   }
+   
 }
 
 //textbox에 값 입력되면 validation error 메세지 지우기
@@ -849,6 +865,7 @@ function modifyByDragNDrop(){
 		},
 		success:function(result){
 			alert("이동이 완료되었습니다.");
+			location.href = "/";
 		},
 		error:function(request,status,error){
 			alert("Modify Reservation By Drop Error");
@@ -1456,6 +1473,7 @@ $(document).ready(function(){
 							success:function(result){
 								alert("이동이 완료되었습니다.");
 								$("#eventContent").dialog("close");
+								
 							},
 							error:function(request,status,error){
 								alert("Modify Reservation By Drop Error");
@@ -1840,6 +1858,7 @@ $(document).ready(function(){
 								success:function(result){
 									alert("수정이 완료되었습니다.");
 									$("#eventContent").dialog("close");
+									window.location.reload(true);
 								},
 								error:function(request,status,error){
 									alert("Modify Reservation By Resize Error");

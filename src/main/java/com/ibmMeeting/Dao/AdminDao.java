@@ -1,6 +1,5 @@
 package com.ibmMeeting.Dao;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.apache.ibatis.annotations.Mapper;

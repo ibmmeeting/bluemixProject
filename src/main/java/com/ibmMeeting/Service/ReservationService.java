@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import com.ibmMeeting.Constant.ConstantCode;
 import com.ibmMeeting.Dao.AdminDao;
@@ -30,7 +29,7 @@ public class ReservationService {
 	MeetingRoomDao meetingRoomDao;
 	
 	@Autowired
-	CommonService commonService;
+	protected CommonService commonService;
 	
 	@Autowired
 	AdminDao adminDao;
@@ -69,6 +68,8 @@ public class ReservationService {
 	 * @throws ParseException 
 	 */
 	public void registReservation(Reservation reservation, String emailCheckValue) throws MessagingException, ParseException{
+		
+		long start = System.currentTimeMillis();
 		
 		
 		System.out.println("::::::::::::::::::::: cont :::::::::::");
@@ -131,7 +132,7 @@ public class ReservationService {
 					+ "			<td style=\"border: 1px solid black;border-collapse: collapse;\">" + rsvConfNm
 					+ "</td>\r\n" + "		</tr>\r\n" + "\r\n" + "\r\n" + "	</table>\r\n" + "	\r\n" + "	</div>\r\n"
 					+ "</body>\r\n" + "</html>";
-			commonService.sendEmail(email, subject, content);
+			//commonService.sendEmail(email, subject, content);
 		}
 		else {
 			
@@ -159,12 +160,18 @@ public class ReservationService {
 					+ "</td>\r\n" + "		</tr>\r\n" + "\r\n" + "\r\n" + "	</table>\r\n" + "	\r\n" + "	</div>\r\n"
 					+ "</body>\r\n" + "</html>";
 			
-			commonService.sendEmail(email, subject, content);
+			
 			
 		}
 		
 		//insert
 		reservationDao.registReservation(reservation);
+		
+		commonService.sendEmail(email, subject, content);
+		
+		
+		long end = System.currentTimeMillis();
+		System.out.println("total: " + (end-start));
 		
 	}
 	
@@ -452,5 +459,6 @@ public class ReservationService {
 		
 		return title;
 	}
+	
 	
 }

@@ -10,12 +10,9 @@ import java.util.HashMap;
 import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.ibmMeeting.Constant.ConstantCode;
 import com.ibmMeeting.Dao.BoardingDao;
 import com.ibmMeeting.Dao.SchedulerDao;
 import com.ibmMeeting.Dao.SettingDao;
