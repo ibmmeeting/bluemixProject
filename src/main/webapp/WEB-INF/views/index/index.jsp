@@ -521,17 +521,6 @@ function doubleSubmitCheck(){
 }
 
 
-var submitted = false;
-function doubleSubmitCheck(){
-    if(submitted){
-        return submitted;
-    }else{
-       submitted = true;
-        return false;
-    }
-}
-
-
 //등록/수정 버튼 클릭시 실행
 function checkForm(){
    if(!doubleSubmitCheck()){
