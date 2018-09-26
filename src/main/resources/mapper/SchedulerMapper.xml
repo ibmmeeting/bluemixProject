@@ -5,35 +5,36 @@
 <mapper namespace="com.ibmMeeting.Dao.SchedulerDao">
 
 
-	<!-- 작성자 : 박성준 -->
-	<!-- 예약시간 전 이메일 전송-->
-	<select id="emailSendUserCount" parameterType="HashMap" resultType="Integer">
-	 <![CDATA[ 
-    	SELECT COUNT(*)
-		FROM RESERVATION, CONFERENCE
-		WHERE RSV_DATE = #{nowDate} 
-		AND RSV_EMAIL_CHECK = 'Y' 
-		AND RSV_START_TIME < #{nowTime} 
-		AND  RSV_CONF_NO = CONF_NO
-		AND RSV_CONFIRM_STATE = 'Y';
-   	]]>
-	</select>
+   <!-- 작성자 : 박성준 -->
+   <!-- 예약시간 전 이메일 전송-->
+   <select id="emailSendUserCount" parameterType="HashMap" resultType="Integer">
+    <![CDATA[ 
+       SELECT COUNT(*)
+      FROM RESERVATION, CONFERENCE
+      WHERE RSV_DATE = #{nowDate} 
+      AND RSV_EMAIL_CHECK = 'Y' 
+      AND RSV_START_TIME < #{nowTime} 
+      AND  RSV_CONF_NO = CONF_NO
+      AND ( RSV_CONFIRM_STATE = 'Y' OR  RSV_CONFIRM_STATE = 'ACCEPT');
+      ]]>
+   </select>
 
 <!-- 작성자 : 박성준 -->
-	<!-- 이메일 받을 사용자 -->
-	<select id="reservaionEmailInfo" parameterType="HashMap" resultType="HashMap">
+   <!-- 이메일 받을 사용자 -->
+   <select id="reservaionEmailInfo" parameterType="HashMap" resultType="HashMap">
     <![CDATA[ 
-    	SELECT RSV_NO , RSV_DATE, RSV_START_TIME, RSV_END_TIME, RSV_MEM_EM, CONF_NM , RSV_TITLE , RSV_MEM_NM
-		FROM RESERVATION, CONFERENCE
-		WHERE RSV_DATE = #{nowDate} AND RSV_EMAIL_CHECK = 'Y' AND RSV_START_TIME < #{nowTime} AND  RSV_CONF_NO = CONF_NO AND RSV_CONFIRM_STATE = 'Y';
-   	]]>
-	</select>
+       SELECT RSV_NO , RSV_DATE, RSV_START_TIME, RSV_END_TIME, RSV_MEM_EM, CONF_NM , RSV_TITLE , RSV_MEM_NM
+      FROM RESERVATION, CONFERENCE
+      WHERE RSV_DATE = #{nowDate} AND RSV_EMAIL_CHECK = 'Y' AND RSV_START_TIME < #{nowTime} AND  RSV_CONF_NO = CONF_NO 
+      AND ( RSV_CONFIRM_STATE = 'Y'OR RSV_CONFIRM_STATE = 'ACCEPT');
+      ]]>
+   </select>
 
-	<!-- 작성자 : 박성준 -->
-	<!-- 예약 메일 전송 후 예약 이메일 상태 변경-->
-	<update id="eMailSendStateUpdate" parameterType="Integer">
-		UPDATE RESERVATION
-		SET RSV_EMAIL_CHECK = "SEND"
-		WHERE RSV_NO = #{rsvNumber};
-	</update>
+   <!-- 작성자 : 박성준 -->
+   <!-- 예약 메일 전송 후 예약 이메일 상태 변경-->
+   <update id="eMailSendStateUpdate" parameterType="Integer">
+      UPDATE RESERVATION
+      SET RSV_EMAIL_CHECK = "SEND"
+      WHERE RSV_NO = #{rsvNumber};
+   </update>
 </mapper>
